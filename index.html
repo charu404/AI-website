@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080d18">
+  <meta name="description" content="Educational AI phishing URL detection demo">
+  <title>PhishGuard — AI URL Scanner</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <div class="grid-overlay"></div>
+  <main class="container">
+    <nav class="nav">
+      <a class="brand" href="#"><span class="brand-mark">⌁</span> PHISH<span>GUARD</span></a>
+      <div class="nav-status"><span class="status-dot"></span> AI SECURITY LAB</div>
+    </nav>
+
+    <section class="hero">
+      <div class="eyebrow"><span class="eyebrow-line"></span> YOUR FIRST LINE OF DEFENCE</div>
+      <h1>Trust the link?<br><span class="gradient-text">Check first.</span></h1>
+      <p class="subtitle">Scan a website address for common phishing signals with a machine-learning model. Stay curious. Click carefully.</p>
+
+      <form class="scanner glass" method="POST">
+        <label for="url">PASTE WEBSITE URL</label>
+        <div class="input-wrap">
+          <span class="input-icon">↗</span>
+          <input id="url" name="url" value="{{ submitted_url }}" type="text"
+                 placeholder="https://example.com" autocomplete="url" required>
+          <button type="submit"><span class="button-label">Analyze link</span><span class="button-arrow">↗</span></button>
+        </div>
+        <div class="form-foot"><span>◈ URL text analysis only</span><span>Never enter passwords</span></div>
+      </form>
+
+      {% if error %}
+      <div class="result-card error reveal"><div class="result-symbol">!</div><div><small>SCAN COULD NOT RUN</small><h2>Check your input</h2><p>{{ error }}</p></div></div>
+      {% endif %}
+
+      {% if result %}
+      <div class="result-card {{ result.kind }} reveal">
+        <div class="result-symbol">{% if result.kind == 'danger' %}⚠{% else %}✓{% endif %}</div>
+        <div class="result-main">
+          <small>ANALYSIS COMPLETE</small>
+          <h2>{{ result.label }}</h2>
+          <p class="checked-url">{{ submitted_url }}</p>
+          {% if result.score is not none %}<div class="score-line"><span>Model phishing score</span><strong>{{ (result.score * 100)|round(1) }}%</strong></div><div class="score-track"><span style="width: {{ (result.score * 100)|round(1) }}%"></span></div>{% endif %}
+          <p class="disclaimer">This is an estimate, not a guarantee. Verify important links independently.</p>
+        </div>
+      </div>
+      {% endif %}
+    </section>
+
+    <section class="features">
+      <article class="feature glass"><div class="feature-top"><span class="feature-icon">⌗</span><span class="feature-index">01 / SIGNALS</span></div><h3>URL intelligence</h3><p>Examines URL length, symbols, hostname structure, IP addresses, HTTPS and suspicious words.</p></article>
+      <article class="feature glass"><div class="feature-top"><span class="feature-icon">⟡</span><span class="feature-index">02 / MODEL</span></div><h3>Machine learning</h3><p>A Random Forest classifier learns patterns from a labelled dataset and predicts a class.</p></article>
+      <article class="feature glass"><div class="feature-top"><span class="feature-icon">⛨</span><span class="feature-index">03 / SAFETY</span></div><h3>Human judgement</h3><p>HTTPS does not prove a site is safe. Treat results as one signal, not a final verdict.</p></article>
+    </section>
+    <div class="notice"><span>ⓘ</span><p><strong>Student project demo.</strong> The included synthetic data only checks that the code runs. Train with a larger, verified dataset before evaluating real-world performance.</p></div>
+    <footer><span>PHISHGUARD © EDUCATIONAL PROJECT</span><span class="footer-right"><span class="status-dot"></span> LOCAL SCANNER</span></footer>
+  </main>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
